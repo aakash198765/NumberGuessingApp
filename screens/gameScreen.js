@@ -1,5 +1,5 @@
 import React, {useState, useRef, useEffect} from 'react';
-import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity, Keyboard, Alert, ColorPropType } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity, Keyboard, Alert, Dimensions } from 'react-native';
 import DefaultStyles from '../constants/default-styles';
 
 //importing global color styles
@@ -68,12 +68,12 @@ const GameScreen = props => {
             <View style={styles.buttonContainer}>
                  <View>
                     <TouchableOpacity style={styles.button} onPress={nextGuessHandler.bind(this, "lower")} >
-                        <Text><Ionicons name="md-remove" size={24} color="Color.primary" /></Text>
+                        <Text><Ionicons name="md-remove" size={40} color="white"  /></Text>
                     </TouchableOpacity>
                  </View>
                 <View> 
                      <TouchableOpacity style={styles.button} onPress={nextGuessHandler.bind(this, "higher")} >
-                         <Text style={styles.countContainer}><Ionicons name="md-add" size={24} color="Color.primary" /></Text>
+                         <Text style={styles.countContainer}><Ionicons name="md-add" size={40} color="white" /></Text>
                     </TouchableOpacity>      
                  </View>
             </View>
@@ -89,13 +89,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center', 
         alignItems: 'center',
         marginBottom: 10,
-        borderWidth: 5
+        marginVertical: 10
+       
+        
     },
     buttonContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-around',
-        marginTop: 20,
-        width: 300,
+        justifyContent: Dimensions.get('window').height < 400? 'space-between': 'space-around',
+        marginTop: Dimensions.get('window').height > 600? 20 : 10,
+        width: Dimensions.get('window')<400? '80%': 300,
         maxWidth: '80%'
     },
     button: {

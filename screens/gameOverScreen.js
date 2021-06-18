@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, Button, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Button, Image, TouchableOpacity, Dimensions, ScrollView, SafeAreaView } from 'react-native';
 
 //importing global color styles
 import Color from '../constants/color';
@@ -10,7 +10,11 @@ const GameOverScreen = props => {
     //Destructuring of object
     const {totalRounds, userNumber1 } = props;
 
-    return (
+    return ( 
+        //it's important to wrap the all view component inside <SafeAreaView>
+        //SafeAreaView will add padding to the screen, and it might create issue in lanscape mode
+    <SafeAreaView>
+        <ScrollView>
         <View style={styles.screen}>
             <Text style={DefaultStyles.bodyText}> The Game is Over!</Text>
         
@@ -29,6 +33,8 @@ const GameOverScreen = props => {
                 </TouchableOpacity>      
             </View>
         </View>
+        </ScrollView>
+    </SafeAreaView>
     );
 
 }
@@ -41,8 +47,8 @@ const styles = StyleSheet.create({
 
     },
     imageStyle: {
-        width: '70%',
-        height: '40%',
+        width: Dimensions.get('window').width * 0.4,
+        height: Dimensions.get('window').height * 0.3,
         
     },
     rounds: {
@@ -58,9 +64,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: Color.accent,
         padding: 20,
-        borderRadius: 50,
+        borderRadius: Dimensions.get('window').height>600? 50 : 10,
         width: '100%',
-        height: 50
+        height: 50,
+        marginVertical: 10
         
       },
       countContainer: {

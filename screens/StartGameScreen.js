@@ -1,7 +1,7 @@
 //keeping the screens in the separate folder - screens, you can also create the in the components
 
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, Button, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { StyleSheet, Text, View,  TouchableWithoutFeedback, Keyboard, ScrollView, KeyboardAvoidingView } from 'react-native'; //TouchableWithoutFeedback, KeyboardAvoidingView - important
 //we're using touchablewithoutfeedback to wrap the whole content on ios, android
 //We're importing Keyboard which is not a component, rather it's a NATIVE API, and using keyboard.dismiss() we can dismiss the keyboard from
 // screen
@@ -11,21 +11,21 @@ import Card from '../components/card';
 //import GlobalStyles from globaltylefile from constants folder
 import  DefaultStyles from '../constants/default-styles';
 
-//importing global color styles
-import Color from '../constants/color';
 
 const StartGameScreen = props => {
 
     return ( 
-        //close keyboard when you type somewhere on the screen
-        <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss();}}>
-         <View style={styles.screen}> 
-
-             <Text style={ {...DefaultStyles.bodyText, marginVertical:20 }}> Start a New Game!</Text>  
-              <Card style={styles.inputContainer} onStartGame={props.onStartGame} />
-
-         </View>
+       
+    <ScrollView> 
+      <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={10}> 
+            <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss();}}>  
+                 <View style={styles.screen}> 
+                     <Text style={ {...DefaultStyles.bodyText, marginVertical:20 }}> Start a New Game!</Text>  
+                    <Card style={styles.inputContainer} onStartGame={props.onStartGame} />
+                 </View>
          </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    </ScrollView>
 
     );
 }
@@ -42,8 +42,9 @@ title: {
     marginVertical: 10,
 },
 inputContainer: {
-    maxWidth: '80%',
-    width: 300,
+    minWidth: 300,
+    width: '80%',
+    maxWidth: '95%',
     alignItems: 'center',
 }
 

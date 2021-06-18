@@ -1,9 +1,8 @@
-import React, {useState} from 'react';
-import { StyleSheet, Text, View, TextInput, Button, Alert, Keyboard, TouchableOpacity  } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import { StyleSheet, Text, View, TextInput, Button, Alert, Keyboard, TouchableOpacity, Dimensions  } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 import Color from '../constants/color';
-import Input from './textInput'; 
 
 //import TextWrapper component from fontComponent --> global component/wrapper compnent to style
 import TextWrapperComponent from '../constants/fontComponent';
@@ -12,6 +11,36 @@ const Card = props => {
     const [enteredValue, setEnteredValue] = useState('');
     const [confirmed, setConfirmed] = useState(false);
     const [selectedNumber, setSelectedNumber] = useState();
+
+    //orientation changes --> portrait and lanscape mode
+    const [buttonWidth, setButtonWidth] = useState(Dimensions.get('window').width /3.5); // default value with which we'll start
+    const [buttonMarginLeft, setButtonMargin] = useState(Dimensions.get('window').width/20 );
+    //function to change/assign new buttonWidth parameter
+   // const updateLayout = () => {
+   //     setButtonWidth(Dimensions.get('window').width /3.5);   
+   // }
+    //addEventListener will recalculate the changes parameters and will trigger the updateLayout 
+    //function to update the buttonWidth
+    //Dimensions.addEventListener('change', updateLayout);
+
+    // In previous technique we're adding a new event listener, instead we can useEffect 
+    // where we can remove the previous event listener, and can add a new event listener
+    // so that only one event listener will be running
+    useEffect(() => {
+        const updateLayout = () => {
+            setButtonWidth(Dimensions.get('window').width /4);
+            setButtonMargin(Dimensions.get('window').width/20 ) ;
+        };
+        Dimensions.addEventListener('change', updateLayout);
+
+
+        return () => { 
+            Dimensions.removeEventListener('change', updateLayout); 
+        }
+    }
+    );
+
+
 
     const numberInputHander = textInput => {
         //it will replace the entered value with empty string if it is not a number - concept of regular expression and replace method
@@ -59,19 +88,19 @@ const Card = props => {
             onChangeText={numberInputHander} value={enteredValue} />
 
         <View style={styles.buttonContainer}>
-            <View style={styles.button} >
+            <View style={{ width: buttonWidth, marginLeft: buttonMarginLeft}} >
                 <Button title="Reset" onPress={resetInputHandler} color={Color.accent} />
             </View>
-            <View style={styles.button1} >
+            <View style={{marginLeft: Dimensions.get('window').width>600 ? 100: buttonMarginLeft, width: buttonWidth}} >
                 <Button title="Confirm" onPress={confirmInputHandler} color={Color.primary} />
             </View>
         </View>
     </View>
     
-    <View style={{...styles.card, ...props.style, elevation: 4, marginTop: 30, width: '70%',alignItems: 'center'}} >
-        <Text style={{fontSize: 15, fontWeight: 'bold'}}> You selected</Text>
+    <View style={{...styles.card, ...props.style, elevation: 4, marginTop: 30, width: Dimensions.get('window').width/2,alignItems: 'center',}} >
+        <Text style={{fontSize: 15, fontWeight: 'bold', }}> You selected</Text>
         <View style={styles.selected}>
-            <Text style={styles.number}>{selectedNumber}</Text>
+            <Text style={styles.number }>{selectedNumber}</Text>
         </View>
         <View style={{marginVertical: 8}}>
             <View> 
@@ -91,8 +120,9 @@ const styles = StyleSheet.create({
     buttonContainer: {
         flexDirection: 'row',
         width: '100%',
-        justifyContent: 'space-between',
-        paddingHorizontal: 15
+       justifyContent: 'space-between',
+        paddingHorizontal: 15,
+        alignItems: 'center'
     },
     card: { 
         shadowColor: 'black',
@@ -105,7 +135,10 @@ const styles = StyleSheet.create({
         borderRadius: 10, 
     },
     button: {
-        width: 90,
+      // width: 120,
+      //marginLeft: Dimensions.get('window').width/30 ,
+      
+      
     },
     input: {
         width: '50%',
@@ -113,7 +146,8 @@ const styles = StyleSheet.create({
         height: 30,
         borderBottomColor: 'grey',
         borderBottomWidth: 1,
-        marginVertical: 10
+        marginVertical: 10,
+        marginLeft: Dimensions.get('window').width < 400 ? 50 : 0,
     },
     selected: {
     
@@ -123,7 +157,8 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: 'center',
         height: 10,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginVertical: 20
 
 
 
@@ -131,6 +166,7 @@ const styles = StyleSheet.create({
     number: {
         color: Colors.accent,
         fontSize: 14,
+       
 
     },
     buttonP: {
@@ -141,7 +177,7 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         width: '100%',
         height: 50,
-        marginVertical: 10
+        marginBottom: 5
         
       },
       countContainer: {

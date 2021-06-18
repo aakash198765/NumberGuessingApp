@@ -1,5 +1,5 @@
 import React from 'react';
-import {  Text, StyleSheet } from 'react-native';
+import {  Text, StyleSheet, Dimensions } from 'react-native';
 
 const TextWrapperComponent = props => {
     return (
@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
 
     textDesing: {
         fontFamily: 'open-sans-bold',
+        marginLeft: Dimensions.get('window').width < 400? 50: 0,
     }
 });
 

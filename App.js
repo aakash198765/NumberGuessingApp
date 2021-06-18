@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState} from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View , SafeAreaView, ScrollView} from 'react-native';
 
 
 
@@ -30,8 +30,12 @@ import GameOverScreen from './screens/gameOverScreen';
 
 
 // create a fetchFonts function to load the fonts in the using  loadSync()
+// we're writing this function outside of the App, bcz this function need not to be 
+//loaded everytime when any components in the functional component renders
+//--> loadAsync ---> is a promise which assure that it will take some-time but will return 
+// the fonts after loading
 const fetchFonts =()=>{
-  Font.loadAsync({
+  return Font.loadAsync({
     'open-sans-regular' : require('./assets/fonts/OpenSans-Regular.ttf'),
     'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf')
   });
@@ -44,17 +48,19 @@ export default function App() {
   //to store number of rounds
   const [guessRounds, setGuessRounds] = useState(0);
 
+
+
    //maintaing state loading -> to indicate the app has been loaded or not-> fonts loaded?
-   const [dataLoaded, setDataLoaded] = useState(false); //intially it will take not loaded
+   const [dataLoaded, setDataLoaded] = useState(false); //intially it will take not-loaded
    //AppLoading function // making sure that the font has been loaded
-  if(!dataLoaded) {
-     return (<AppLoading 
+  // startAsync prop will take a function and make sure it returns a promise when functon is called
+   if(!dataLoaded) {
+     return <AppLoading 
                 startAsync={fetchFonts} 
                 onFinish={()=>setDataLoaded(true)} 
                 onError={(err)=>console.log(err)} 
-            />
-          );
-   }
+            />       
+   };
 
 
 
@@ -88,10 +94,14 @@ export default function App() {
   //Initally it will show <StartGameScreen />, but when you click "START GAME" button, it will set userNumber to "true" and 
   //then "<GameScreen />" will be render, 
   return (
-    <View style={styles.screen}>
-     <Header title="Guess a Number" style={DefaultStyles.head} />
-    {content}
-    </View>
+    <SafeAreaView style={styles.screen}>
+      <ScrollView>
+      <View >
+         <Header title="Guess a Number" style={DefaultStyles.head} />
+        {content}
+       </View>
+       </ScrollView>
+    </SafeAreaView>
   );
 }
 
